@@ -1,0 +1,10 @@
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import main.java.controller.*?>
+
+<VBox xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.java.controller.CalculatorController">
+	
+	<Label text="Hurz" />
+	<Button text="Submit" />
+
+</VBox>
