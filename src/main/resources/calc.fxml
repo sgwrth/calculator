@@ -1,10 +1,30 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
-<?import main.java.controller.*?>
+<?import javafx.scene.text.*?>
 
-<VBox xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.java.controller.CalculatorController">
+<VBox xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.CalculatorController">
 	
-	<Label text="Hurz" />
-	<Button text="Submit" />
+	<Label text="Calcutron 9001" />
+	<Button text="0" fx:id="button0" onAction="#enter0" />
+	<Button text="1" fx:id="button1" onAction="#enter1" />
+	<Button text="2" fx:id="button2" onAction="#enter2" />
+	<Button text="3" fx:id="button3" onAction="#enter3" />
+	<Button text="4" fx:id="button4" onAction="#enter4" />
+	<Button text="5" fx:id="button5" onAction="#enter5" />
+	<Button text="6" fx:id="button6" onAction="#enter6" />
+	<Button text="7" fx:id="button7" onAction="#enter7" />
+	<Button text="8" fx:id="button8" onAction="#enter8" />
+	<Button text="9" fx:id="button9" onAction="#enter9" />
+
+	<Button text="+" fx:id="addition" onAction="#selectAddition" />
+	<Button text="-" fx:id="subtraction" onAction="#selectSubtraction" />
+	<Button text="*" fx:id="multiplication" onAction="#selectMultiplication" />
+	<Button text="/" fx:id="division" onAction="#selectDivision" />
+
+	<Button text="=" fx:id="equals" onAction="#equals" />
+	<Button text="Del" fx:id="delete" onAction="#delete" />
+	<Button text="Clr" fx:id="clear" onAction="#clear" />
+
+	<Text text="hi there" fx:id="display" />
 
 </VBox>

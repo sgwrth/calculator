@@ -1,10 +1,7 @@
 package main;
 
-import java.io.File;
-
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.Group;
 import javafx.scene.image.*;
 import javafx.scene.paint.Color;
@@ -20,7 +17,7 @@ public class Main extends Application {
 
 	public final String STAGE_TITLE = "CALCUTRON 9001";
 	public final int STAGE_WIDTH = 400;
-	public final int STAGE_HEIGHT = 500;
+	public final int STAGE_HEIGHT = 600;
 	public final int STAGE_POS_X = 150;
 	public final int STAGE_POS_Y = 150;
 	public final boolean STAGE_IS_RESIZABLE = false;
@@ -104,7 +101,7 @@ public class Main extends Application {
 
 			stage.setScene(fxmlScene);
 			stage.show();
-		} catch(Exception e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
