@@ -1,30 +1,144 @@
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
+<?xml version="1.0" encoding="UTF-8"?>
 
-<VBox xmlns:fx="http://javafx.com/fxml/1" fx:controller="controller.CalculatorController">
-	
-	<Label text="Calcutron 9001" />
-	<Button text="0" fx:id="button0" onAction="#enter0" />
-	<Button text="1" fx:id="button1" onAction="#enter1" />
-	<Button text="2" fx:id="button2" onAction="#enter2" />
-	<Button text="3" fx:id="button3" onAction="#enter3" />
-	<Button text="4" fx:id="button4" onAction="#enter4" />
-	<Button text="5" fx:id="button5" onAction="#enter5" />
-	<Button text="6" fx:id="button6" onAction="#enter6" />
-	<Button text="7" fx:id="button7" onAction="#enter7" />
-	<Button text="8" fx:id="button8" onAction="#enter8" />
-	<Button text="9" fx:id="button9" onAction="#enter9" />
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 
-	<Button text="+" fx:id="addition" onAction="#selectAddition" />
-	<Button text="-" fx:id="subtraction" onAction="#selectSubtraction" />
-	<Button text="*" fx:id="multiplication" onAction="#selectMultiplication" />
-	<Button text="/" fx:id="division" onAction="#selectDivision" />
-
-	<Button text="=" fx:id="equals" onAction="#equals" />
-	<Button text="Del" fx:id="delete" onAction="#delete" />
-	<Button text="Clr" fx:id="clear" onAction="#clear" />
-
-	<Text text="hi there" fx:id="display" />
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="400.0" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/21" fx:controller="controller.CalculatorController">
+   <Pane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="100.0" prefWidth="400.0">
+      <children>
+      
+            	<Text fx:id="display" layoutY="68.0" text="0" textAlignment="RIGHT" wrappingWidth="380.0">
+            <font>
+               <Font size="48.0" />
+            </font>
+         </Text>
+      </children>
+   </Pane>
+   <GridPane>
+     <columnConstraints>
+       <ColumnConstraints hgrow="SOMETIMES" minWidth="-Infinity" prefWidth="100.0" />
+       <ColumnConstraints hgrow="SOMETIMES" minWidth="-Infinity" prefWidth="100.0" />
+         <ColumnConstraints hgrow="SOMETIMES" minWidth="-Infinity" prefWidth="100.0" />
+         <ColumnConstraints hgrow="SOMETIMES" minWidth="-Infinity" prefWidth="100.0" />
+     </columnConstraints>
+     <rowConstraints>
+       <RowConstraints maxHeight="100.0" minHeight="-Infinity" prefHeight="100.0" vgrow="SOMETIMES" />
+         <RowConstraints vgrow="SOMETIMES" />
+         <RowConstraints maxHeight="100.0" minHeight="-Infinity" prefHeight="100.0" vgrow="SOMETIMES" />
+         <RowConstraints maxHeight="100.0" minHeight="-Infinity" prefHeight="100.0" vgrow="SOMETIMES" />
+         <RowConstraints maxHeight="100.0" minHeight="-Infinity" prefHeight="100.0" vgrow="SOMETIMES" />
+     </rowConstraints>
+      <children>
+      	<Button fx:id="button7" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#enter7" prefHeight="100.0" prefWidth="100.0" text="7" GridPane.halignment="CENTER">
+            <font>
+               <Font size="24.0" />
+            </font>
+         </Button>
+      	<Button fx:id="button0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#enter0" prefHeight="100.0" prefWidth="100.0" text="0" GridPane.halignment="CENTER" GridPane.rowIndex="4">
+            <font>
+               <Font size="24.0" />
+            </font>
+         </Button>
+      	<Button fx:id="button1" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#enter1" prefHeight="100.0" prefWidth="100.0" text="1" GridPane.halignment="CENTER" GridPane.rowIndex="3">
+            <font>
+               <Font size="24.0" />
+            </font>
+         </Button>
+      	<Button fx:id="button2" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#enter2" prefHeight="100.0" prefWidth="100.0" text="2" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="3">
+            <font>
+               <Font size="24.0" />
+            </font>
+         </Button>
+      	<Button fx:id="button3" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#enter3" prefHeight="100.0" prefWidth="100.0" text="3" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="3">
+            <font>
+               <Font size="24.0" />
+            </font>
+         </Button>
+      	<Button fx:id="button8" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#enter8" prefHeight="100.0" prefWidth="100.0" text="8" GridPane.columnIndex="1" GridPane.halignment="CENTER">
+            <font>
+               <Font size="24.0" />
+            </font>
+         </Button>
+      	<Button fx:id="button9" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#enter9" prefHeight="100.0" prefWidth="100.0" text="9" GridPane.columnIndex="2" GridPane.halignment="CENTER">
+            <font>
+               <Font size="24.0" />
+            </font>
+         </Button>
+      	<Button fx:id="button5" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#enter5" prefHeight="100.0" prefWidth="100.0" text="5" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2">
+            <font>
+               <Font size="24.0" />
+            </font>
+         </Button>
+      	<Button fx:id="subtraction" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#selectSubtraction" prefHeight="100.0" prefWidth="100.0" text="-" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="2">
+            <font>
+               <Font size="24.0" />
+            </font>
+         </Button>
+      	<Button fx:id="button6" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#enter6" prefHeight="100.0" prefWidth="100.0" text="6" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="2">
+            <font>
+               <Font size="24.0" />
+            </font>
+         </Button>
+      	<Button fx:id="button4" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#enter4" prefHeight="100.0" prefWidth="100.0" text="4" GridPane.halignment="CENTER" GridPane.rowIndex="2">
+            <font>
+               <Font size="24.0" />
+            </font>
+         </Button>
+      	<Button fx:id="multiplication" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#selectMultiplication" prefHeight="100.0" prefWidth="100.0" text="*" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="3">
+            <font>
+               <Font size="24.0" />
+            </font>
+         </Button>
+      	<Button fx:id="division" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#selectDivision" prefHeight="100.0" prefWidth="100.0" text="/" GridPane.columnIndex="3" GridPane.halignment="CENTER" GridPane.rowIndex="4">
+            <font>
+               <Font size="24.0" />
+            </font>
+         </Button>
+         <Button fx:id="period" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" mnemonicParsing="false" onAction="#enterPeriod" prefHeight="100.0" prefWidth="100.0" text="." GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="4">
+            <font>
+               <Font size="24.0" />
+            </font>
+         </Button>
+      
+            	<Button fx:id="addition" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#selectAddition" prefHeight="100.0" prefWidth="100.0" text="+" GridPane.columnIndex="3" GridPane.halignment="CENTER">
+            <font>
+               <Font size="24.0" />
+            </font>
+         </Button>
+      
+      	<Button fx:id="equals" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" onAction="#equals" prefHeight="100.0" prefWidth="100.0" text="=" GridPane.columnIndex="2" GridPane.halignment="CENTER" GridPane.rowIndex="4">
+            <font>
+               <Font size="24.0" />
+            </font>
+         </Button>
+      </children>
+   </GridPane>
+   <GridPane>
+     <columnConstraints>
+       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+       <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
+     </columnConstraints>
+     <rowConstraints>
+       <RowConstraints minHeight="-Infinity" prefHeight="100.0" vgrow="SOMETIMES" />
+     </rowConstraints>
+      <children>
+      	<Button fx:id="clear" onAction="#clear" prefHeight="100.0" prefWidth="200.0" text="Clr" GridPane.columnIndex="1">
+            <font>
+               <Font size="24.0" />
+            </font>
+         </Button>
+      	<Button fx:id="delete" onAction="#delete" prefHeight="100.0" prefWidth="200.0" text="Del">
+            <font>
+               <Font size="24.0" />
+            </font>
+         </Button>
+      </children>
+   </GridPane>
 
 </VBox>

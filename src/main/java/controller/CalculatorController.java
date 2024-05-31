@@ -25,7 +25,8 @@ public class CalculatorController implements Initializable {
     private String temp = "";
     private IArithmeticStrategy arithmeticStrategy;
 
-    public CalculatorController() {}
+    public CalculatorController() {
+    }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -33,25 +34,77 @@ public class CalculatorController implements Initializable {
         this.selectString = a;
     }
 
-    public void enter0() { btnClickZero(); }
-    public void enter1() { btnClickEinsBisNeun("1"); }
-    public void enter2() { btnClickEinsBisNeun("2"); }
-    public void enter3() { btnClickEinsBisNeun("3"); }
-    public void enter4() { btnClickEinsBisNeun("4"); }
-    public void enter5() { btnClickEinsBisNeun("5"); }
-    public void enter6() { btnClickEinsBisNeun("6"); }
-    public void enter7() { btnClickEinsBisNeun("7"); }
-    public void enter8() { btnClickEinsBisNeun("8"); }
-    public void enter9() { btnClickEinsBisNeun("9"); }
+    public void enter0() {
+        btnClickZero();
+    }
 
-    public void selectAddition() { btnClickRechenart(new Addition(), " + "); }
-    public void selectSubtraction() { btnClickRechenart(new Subtraction(), " - "); }
-    public void selectMultiplication() { btnClickRechenart(new Multiplication(), " * "); }
-    public void selectDivision() { btnClickRechenart(new Division(), " / "); }
+    public void enter1() {
+        btnClickEinsBisNeun("1");
+    }
 
-    public void equals() { btnClickEquals(); }
-    public void delete() { btnClickDelete(); }
-    public void clear() { btnClickClear(); }
+    public void enter2() {
+        btnClickEinsBisNeun("2");
+    }
+
+    public void enter3() {
+        btnClickEinsBisNeun("3");
+    }
+
+    public void enter4() {
+        btnClickEinsBisNeun("4");
+    }
+
+    public void enter5() {
+        btnClickEinsBisNeun("5");
+    }
+
+    public void enter6() {
+        btnClickEinsBisNeun("6");
+    }
+
+    public void enter7() {
+        btnClickEinsBisNeun("7");
+    }
+
+    public void enter8() {
+        btnClickEinsBisNeun("8");
+    }
+
+    public void enter9() {
+        btnClickEinsBisNeun("9");
+    }
+
+    public void enterPeriod() {
+        btnClickPeriod();
+    }
+
+    public void selectAddition() {
+        btnClickRechenart(new Addition(), " + ");
+    }
+
+    public void selectSubtraction() {
+        btnClickRechenart(new Subtraction(), " - ");
+    }
+
+    public void selectMultiplication() {
+        btnClickRechenart(new Multiplication(), " * ");
+    }
+
+    public void selectDivision() {
+        btnClickRechenart(new Division(), " / ");
+    }
+
+    public void equals() {
+        btnClickEquals();
+    }
+
+    public void delete() {
+        btnClickDelete();
+    }
+
+    public void clear() {
+        btnClickClear();
+    }
 
     public void btnClickEinsBisNeun(String number) {
         if (!selectString.toString().equals("0")) {
@@ -71,8 +124,7 @@ public class CalculatorController implements Initializable {
 
     public void btnClickRechenart(
             IArithmeticStrategy strat,
-            String operatorZeichen
-    ) {
+            String operatorZeichen) {
         if (selectString == a) {
             arithmeticStrategy = strat;
             selectString = b;
@@ -89,8 +141,7 @@ public class CalculatorController implements Initializable {
         try {
             double result = arithmeticStrategy.calculate(
                     Double.parseDouble(a.toString()),
-                    Double.parseDouble(b.toString())
-            );
+                    Double.parseDouble(b.toString()));
             String resultString = String.valueOf(result);
             if (resultString.charAt(resultString.length() - 1) == '0'
                     && resultString.charAt(resultString.length() - 2) == '.') {

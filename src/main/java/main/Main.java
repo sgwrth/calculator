@@ -93,8 +93,8 @@ public class Main extends Application {
 					.toURI()
 					.toString());
 			stage.getIcons().add(icon);
-			stage.setWidth(STAGE_WIDTH);
-			stage.setHeight(STAGE_HEIGHT);
+			// stage.setWidth(STAGE_WIDTH);
+			// stage.setHeight(STAGE_HEIGHT);
 			stage.setResizable(STAGE_IS_RESIZABLE);
 			stage.setX(STAGE_POS_X);
 			stage.setY(STAGE_POS_Y);
