@@ -11,12 +11,13 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
+// import javafx.scene.control.Button;
 import javafx.scene.text.Text;
 
 public class CalculatorController implements Initializable {
 
     public Text display;
+    public Text minidisplay;
 
     private Calculator calculator;
     private StringBuilder a = new StringBuilder();
@@ -128,8 +129,10 @@ public class CalculatorController implements Initializable {
         if (selectString == a) {
             arithmeticStrategy = strat;
             selectString = b;
-            temp = removePeriod(a.toString()) + operatorZeichen;
+            // temp = removePeriod(a.toString()) + operatorZeichen;
+            temp = operatorZeichen;
             display.setText(temp);
+            minidisplay.setText(a.toString());
         } else {
             arithmeticStrategy = strat;
             temp = removePeriod(a.toString()) + operatorZeichen;
@@ -152,15 +155,37 @@ public class CalculatorController implements Initializable {
                 a = new StringBuilder();
                 a.append(cropped);
             } else {
-                display.setText(resultString);
+                if (isOverlong(resultString)) {
+                    display.setText(cropOverlong(resultString));
+                } else {
+                    display.setText(resultString);
+                }
                 a = new StringBuilder();
                 a.append(resultString);
             }
             selectString = a;
             b = new StringBuilder();
             temp = "";
+            minidisplay.setText("");
         } catch (NumberFormatException e) {
             e.printStackTrace();
+        }
+    }
+
+    public boolean isOverlong(String string) {
+        if (string.length() >= 14) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public String cropOverlong(String string) {
+        if (string.length() >= 14) {
+            String torso = string.substring(0, 11);
+            return torso + "...";
+        } else {
+            return string;
         }
     }
 
@@ -186,6 +211,7 @@ public class CalculatorController implements Initializable {
         selectString = a;
         selectString.append("0");
         display.setText(selectString.toString());
+        minidisplay.setText("");
     }
 
     public String removePeriod(String string) {
