@@ -11,10 +11,11 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 import javafx.fxml.Initializable;
-// import javafx.scene.control.Button;
 import javafx.scene.text.Text;
 
 public class CalculatorController implements Initializable {
+
+    public final int MAX_STRING_LENGTH = 14;
 
     public Text display;
     public Text minidisplay;
@@ -25,9 +26,6 @@ public class CalculatorController implements Initializable {
     private StringBuilder selectString;
     private String temp = "";
     private IArithmeticStrategy arithmeticStrategy;
-
-    public CalculatorController() {
-    }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -129,10 +127,9 @@ public class CalculatorController implements Initializable {
         if (selectString == a) {
             arithmeticStrategy = strat;
             selectString = b;
-            // temp = removePeriod(a.toString()) + operatorZeichen;
             temp = operatorZeichen;
             display.setText(temp);
-            minidisplay.setText(a.toString());
+            minidisplay.setText(removePeriod(a.toString()));
         } else {
             arithmeticStrategy = strat;
             temp = removePeriod(a.toString()) + operatorZeichen;
@@ -146,22 +143,19 @@ public class CalculatorController implements Initializable {
                     Double.parseDouble(a.toString()),
                     Double.parseDouble(b.toString()));
             String resultString = String.valueOf(result);
-            if (resultString.charAt(resultString.length() - 1) == '0'
-                    && resultString.charAt(resultString.length() - 2) == '.') {
+            if (endsWithPeriodZero(resultString)) {
                 StringBuilder cropped = new StringBuilder();
                 cropped.append(resultString);
                 cropped.delete(cropped.length() - 2, cropped.length());
                 display.setText(cropped.toString());
-                a = new StringBuilder();
-                a.append(cropped);
+                a = new StringBuilder().append(cropped);
             } else {
                 if (isOverlong(resultString)) {
                     display.setText(cropOverlong(resultString));
                 } else {
                     display.setText(resultString);
                 }
-                a = new StringBuilder();
-                a.append(resultString);
+                a = new StringBuilder().append(resultString);
             }
             selectString = a;
             b = new StringBuilder();
@@ -172,21 +166,17 @@ public class CalculatorController implements Initializable {
         }
     }
 
+    public boolean endsWithPeriodZero(String string) {
+        return (string.charAt(string.length() - 1) == '0'
+                && string.charAt(string.length() - 2) == '.');
+    }
+
     public boolean isOverlong(String string) {
-        if (string.length() >= 14) {
-            return true;
-        } else {
-            return false;
-        }
+        return (string.length() >= MAX_STRING_LENGTH) ? true : false;
     }
 
     public String cropOverlong(String string) {
-        if (string.length() >= 14) {
-            String torso = string.substring(0, 11);
-            return torso + "...";
-        } else {
-            return string;
-        }
+        return string.substring(0, MAX_STRING_LENGTH - 3) + "...";
     }
 
     public void btnClickDelete() {
@@ -216,8 +206,7 @@ public class CalculatorController implements Initializable {
 
     public String removePeriod(String string) {
         try {
-            char[] temp = string.toCharArray();
-            if (temp[temp.length - 1] == '.') {
+            if (string.charAt(string.length() - 1) == '.') {
                 StringBuilder tempStringB = new StringBuilder();
                 tempStringB.append(string);
                 tempStringB.delete(tempStringB.length() - 1, tempStringB.length());
@@ -235,18 +224,20 @@ public class CalculatorController implements Initializable {
             selectString.append("0");
             selectString.append(".");
         }
-        char[] array = selectString.toString().toCharArray();
-        boolean noPeriod = true;
-        for (char c : array) {
-            if (c == '.') {
-                noPeriod = false;
-                break;
-            }
-        }
-        if (noPeriod) {
+        if (hasPeriod(selectString.toString())) {
             selectString.append(".");
         }
         display.setText(temp + selectString);
+    }
+
+    public boolean hasPeriod(String string) {
+        char[] array = string.toCharArray();
+        for (char c : array) {
+            if (c == '.') {
+                return false;
+            }
+        }
+        return true;
     }
 
 }
