@@ -139,16 +139,13 @@ public class CalculatorController implements Initializable {
     }
 
     public void btnClickStrategy(IArithmeticStrategy strat, String operator) {
-        arithmeticStrategy = strat;
-        resetOnNextInput = false;
         if (selectedString == a) {
-            selectedString = b;
+            arithmeticStrategy = strat;
             tempString = operator;
             display.setText(tempString);
             minidisplay.setText(removePeriod(a.toString()));
-        } else {
-            tempString = removePeriod(a.toString()) + operator;
-            display.setText(tempString + selectedString);
+            selectedString = b;
+            resetOnNextInput = false;
         }
     }
 
