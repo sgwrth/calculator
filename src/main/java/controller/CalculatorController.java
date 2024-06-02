@@ -1,11 +1,10 @@
 package controller;
 
-import model.Addition;
-import model.Calculator;
-import model.Division;
-import model.IArithmeticStrategy;
-import model.Multiplication;
-import model.Subtraction;
+import strategy.Addition;
+import strategy.Division;
+import strategy.IArithmeticStrategy;
+import strategy.Multiplication;
+import strategy.Subtraction;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -15,22 +14,23 @@ import javafx.scene.text.Text;
 
 public class CalculatorController implements Initializable {
 
-    public final int MAX_STRING_LENGTH = 14;
+    private final int MAX_STRING_LENGTH = 14;
 
     public Text display;
     public Text minidisplay;
 
-    private Calculator calculator;
-    private StringBuilder a = new StringBuilder();
-    private StringBuilder b = new StringBuilder();
-    private StringBuilder selectString;
-    private String temp = "";
+    private StringBuilder a;
+    private StringBuilder b;
+    private StringBuilder selectedString;
+    private String tempString;
     private IArithmeticStrategy arithmeticStrategy;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        this.calculator = new Calculator();
-        this.selectString = a;
+        this.a = new StringBuilder();
+        this.b = new StringBuilder();
+        this.tempString = "";
+        this.selectedString = a;
     }
 
     public void enter0() {
@@ -38,39 +38,39 @@ public class CalculatorController implements Initializable {
     }
 
     public void enter1() {
-        btnClickEinsBisNeun("1");
+        btnClickOneToNine("1");
     }
 
     public void enter2() {
-        btnClickEinsBisNeun("2");
+        btnClickOneToNine("2");
     }
 
     public void enter3() {
-        btnClickEinsBisNeun("3");
+        btnClickOneToNine("3");
     }
 
     public void enter4() {
-        btnClickEinsBisNeun("4");
+        btnClickOneToNine("4");
     }
 
     public void enter5() {
-        btnClickEinsBisNeun("5");
+        btnClickOneToNine("5");
     }
 
     public void enter6() {
-        btnClickEinsBisNeun("6");
+        btnClickOneToNine("6");
     }
 
     public void enter7() {
-        btnClickEinsBisNeun("7");
+        btnClickOneToNine("7");
     }
 
     public void enter8() {
-        btnClickEinsBisNeun("8");
+        btnClickOneToNine("8");
     }
 
     public void enter9() {
-        btnClickEinsBisNeun("9");
+        btnClickOneToNine("9");
     }
 
     public void enterPeriod() {
@@ -78,19 +78,19 @@ public class CalculatorController implements Initializable {
     }
 
     public void selectAddition() {
-        btnClickRechenart(new Addition(), " + ");
+        btnClickStrategy(new Addition(), "+ ");
     }
 
     public void selectSubtraction() {
-        btnClickRechenart(new Subtraction(), " - ");
+        btnClickStrategy(new Subtraction(), "- ");
     }
 
     public void selectMultiplication() {
-        btnClickRechenart(new Multiplication(), " * ");
+        btnClickStrategy(new Multiplication(), "* ");
     }
 
     public void selectDivision() {
-        btnClickRechenart(new Division(), " / ");
+        btnClickStrategy(new Division(), "/ ");
     }
 
     public void equals() {
@@ -105,65 +105,69 @@ public class CalculatorController implements Initializable {
         btnClickClear();
     }
 
-    public void btnClickEinsBisNeun(String number) {
-        if (!selectString.toString().equals("0")) {
-            selectString.append(number);
+    public void btnClickOneToNine(String number) {
+        if (!selectedString.toString().equals("0")) {
+            selectedString.append(number);
         } else {
-            selectString.replace(0, 1, number);
+            selectedString.replace(0, 1, number);
         }
-        display.setText(temp + selectString);
+        display.setText(tempString + selectedString);
     }
 
     public void btnClickZero() {
-        if (!selectString.toString().equals("0")) {
-            selectString.append("0");
+        if (!selectedString.toString().equals("0")) {
+            selectedString.append("0");
         }
-        display.setText(temp + selectString);
+        display.setText(tempString + selectedString);
     }
 
-    public void btnClickRechenart(
+    public void btnClickStrategy(
             IArithmeticStrategy strat,
-            String operatorZeichen) {
-        if (selectString == a) {
+            String operatorSymbol) {
+        if (selectedString == a) {
             arithmeticStrategy = strat;
-            selectString = b;
-            temp = operatorZeichen;
-            display.setText(temp);
+            selectedString = b;
+            tempString = operatorSymbol;
+            display.setText(tempString);
             minidisplay.setText(removePeriod(a.toString()));
         } else {
             arithmeticStrategy = strat;
-            temp = removePeriod(a.toString()) + operatorZeichen;
-            display.setText(temp + selectString);
+            tempString = removePeriod(a.toString()) + operatorSymbol;
+            display.setText(tempString + selectedString);
         }
     }
 
     public void btnClickEquals() {
-        try {
-            double result = arithmeticStrategy.calculate(
-                    Double.parseDouble(a.toString()),
-                    Double.parseDouble(b.toString()));
-            String resultString = String.valueOf(result);
-            if (endsWithPeriodZero(resultString)) {
-                StringBuilder cropped = new StringBuilder();
-                cropped.append(resultString);
-                cropped.delete(cropped.length() - 2, cropped.length());
-                display.setText(cropped.toString());
-                a = new StringBuilder().append(cropped);
+        double result = doCalculation();
+        String resultString = String.valueOf(result);
+        if (endsWithPeriodZero(resultString)) {
+            cropPeriodZero(resultString);
+        } else {
+            if (isOverlong(resultString)) {
+                display.setText(cropOverlong(resultString));
             } else {
-                if (isOverlong(resultString)) {
-                    display.setText(cropOverlong(resultString));
-                } else {
-                    display.setText(resultString);
-                }
-                a = new StringBuilder().append(resultString);
+                display.setText(resultString);
             }
-            selectString = a;
-            b = new StringBuilder();
-            temp = "";
-            minidisplay.setText("");
-        } catch (NumberFormatException e) {
-            e.printStackTrace();
+            a = new StringBuilder().append(resultString);
         }
+        selectedString = a;
+        b = new StringBuilder();
+        tempString = "";
+        minidisplay.setText("");
+    }
+
+    public double doCalculation() {
+        return arithmeticStrategy.calculate(
+                Double.parseDouble(a.toString()),
+                Double.parseDouble(b.toString()));
+    }
+
+    public void cropPeriodZero(String string) {
+        StringBuilder cropped = new StringBuilder();
+        cropped.append(string);
+        cropped.delete(cropped.length() - 2, cropped.length());
+        display.setText(cropped.toString());
+        a = new StringBuilder().append(cropped);
     }
 
     public boolean endsWithPeriodZero(String string) {
@@ -172,7 +176,7 @@ public class CalculatorController implements Initializable {
     }
 
     public boolean isOverlong(String string) {
-        return (string.length() >= MAX_STRING_LENGTH) ? true : false;
+        return string.length() >= MAX_STRING_LENGTH;
     }
 
     public String cropOverlong(String string) {
@@ -180,27 +184,27 @@ public class CalculatorController implements Initializable {
     }
 
     public void btnClickDelete() {
-        char[] tempArray = selectString.toString().toCharArray();
-        if (selectString.length() == 2 && tempArray[0] == '-') {
-            selectString.replace(0, 1, "0");
-            selectString.delete(1, selectString.length());
+        char[] tempArray = selectedString.toString().toCharArray();
+        if (selectedString.length() == 2 && tempArray[0] == '-') {
+            selectedString.replace(0, 1, "0");
+            selectedString.delete(1, selectedString.length());
         }
-        if (selectString.length() == 1 && !selectString.toString().equals("0")) {
-            selectString.replace(0, 1, "0");
+        if (selectedString.length() == 1 && !selectedString.toString().equals("0")) {
+            selectedString.replace(0, 1, "0");
         }
-        if (selectString.length() > 1) {
-            selectString.deleteCharAt(selectString.length() - 1);
+        if (selectedString.length() > 1) {
+            selectedString.deleteCharAt(selectedString.length() - 1);
         }
-        display.setText(temp + selectString.toString());
+        display.setText(tempString + selectedString.toString());
     }
 
     public void btnClickClear() {
-        temp = "";
+        tempString = "";
         a = new StringBuilder();
         b = new StringBuilder();
-        selectString = a;
-        selectString.append("0");
-        display.setText(selectString.toString());
+        selectedString = a;
+        selectedString.append("0");
+        display.setText(selectedString.toString());
         minidisplay.setText("");
     }
 
@@ -220,14 +224,14 @@ public class CalculatorController implements Initializable {
     }
 
     public void btnClickPeriod() {
-        if (selectString.length() == 0) {
-            selectString.append("0");
-            selectString.append(".");
+        if (selectedString.isEmpty()) {
+            selectedString.append("0");
+            selectedString.append(".");
         }
-        if (hasPeriod(selectString.toString())) {
-            selectString.append(".");
+        if (hasPeriod(selectedString.toString())) {
+            selectedString.append(".");
         }
-        display.setText(temp + selectString);
+        display.setText(tempString + selectedString);
     }
 
     public boolean hasPeriod(String string) {

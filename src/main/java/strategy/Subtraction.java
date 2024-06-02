@@ -1,4 +1,4 @@
-package model;
+package strategy;
 
 public class Subtraction implements IArithmeticStrategy {
 
