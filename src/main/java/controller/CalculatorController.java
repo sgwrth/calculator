@@ -24,6 +24,7 @@ public class CalculatorController implements Initializable {
     private StringBuilder selectedString;
     private String tempString;
     private IArithmeticStrategy arithmeticStrategy;
+    private boolean resetOnNextInput;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -31,10 +32,11 @@ public class CalculatorController implements Initializable {
         this.b = new StringBuilder();
         this.tempString = "";
         this.selectedString = a;
+        this.resetOnNextInput = false;
     }
 
     public void enter0() {
-        btnClickZero();
+        btnClickZero("0");
     }
 
     public void enter1() {
@@ -74,7 +76,7 @@ public class CalculatorController implements Initializable {
     }
 
     public void enterPeriod() {
-        btnClickPeriod();
+        btnClickPeriod(".");
     }
 
     public void selectAddition() {
@@ -106,54 +108,69 @@ public class CalculatorController implements Initializable {
     }
 
     public void btnClickOneToNine(String number) {
-        if (!selectedString.toString().equals("0")) {
-            selectedString.append(number);
+        if (resetOnNextInput) {
+            resetStringWithInput(number);
         } else {
-            selectedString.replace(0, 1, number);
+            if (!selectedString.toString().equals("0")) {
+                selectedString.append(number);
+            } else {
+                selectedString.replace(0, 1, number);
+            }
         }
         display.setText(tempString + selectedString);
     }
 
-    public void btnClickZero() {
-        if (!selectedString.toString().equals("0")) {
-            selectedString.append("0");
-        }
-        display.setText(tempString + selectedString);
+    public void resetStringWithInput(String string) {
+        a = new StringBuilder().append(string);
+        selectedString = a;
+        display.setText(selectedString.toString());
+        resetOnNextInput = false;
     }
 
-    public void btnClickStrategy(
-            IArithmeticStrategy strat,
-            String operatorSymbol) {
+    public void btnClickZero(String zero) {
+        if (resetOnNextInput) {
+            resetStringWithInput(zero);
+        } else {
+            if (!selectedString.toString().equals("0")) {
+                selectedString.append("0");
+            }
+            display.setText(tempString + selectedString);
+        }
+    }
+
+    public void btnClickStrategy(IArithmeticStrategy strat, String operator) {
+        arithmeticStrategy = strat;
+        resetOnNextInput = false;
         if (selectedString == a) {
-            arithmeticStrategy = strat;
             selectedString = b;
-            tempString = operatorSymbol;
+            tempString = operator;
             display.setText(tempString);
             minidisplay.setText(removePeriod(a.toString()));
         } else {
-            arithmeticStrategy = strat;
-            tempString = removePeriod(a.toString()) + operatorSymbol;
+            tempString = removePeriod(a.toString()) + operator;
             display.setText(tempString + selectedString);
         }
     }
 
     public void btnClickEquals() {
-        double result = doCalculation();
-        String resultString = String.valueOf(result);
-        if (endsWithPeriodZero(resultString)) {
-            cropPeriodZero(resultString);
-        } else {
-            if (isOverlong(resultString)) {
-                display.setText(cropOverlong(resultString));
+        if (selectedString == b) {
+            String resultString = String.valueOf(doCalculation());
+            if (endsWithPeriodZero(resultString)) {
+                cropPeriodZero(resultString);
             } else {
-                display.setText(resultString);
+                if (isOverlong(resultString)) {
+                    display.setText(cropOverlong(resultString));
+                } else {
+                    display.setText(resultString);
+                }
+                a = new StringBuilder().append(resultString);
             }
-            a = new StringBuilder().append(resultString);
+            selectedString = a;
+            b = new StringBuilder();
+            tempString = "";
+            minidisplay.setText("");
+            resetOnNextInput = true;
         }
-        selectedString = a;
-        b = new StringBuilder();
-        tempString = "";
-        minidisplay.setText("");
     }
 
     public double doCalculation() {
@@ -163,8 +180,7 @@ public class CalculatorController implements Initializable {
     }
 
     public void cropPeriodZero(String string) {
-        StringBuilder cropped = new StringBuilder();
-        cropped.append(string);
+        StringBuilder cropped = new StringBuilder().append(string);
         cropped.delete(cropped.length() - 2, cropped.length());
         display.setText(cropped.toString());
         a = new StringBuilder().append(cropped);
@@ -184,35 +200,42 @@ public class CalculatorController implements Initializable {
     }
 
     public void btnClickDelete() {
-        char[] tempArray = selectedString.toString().toCharArray();
-        if (selectedString.length() == 2 && tempArray[0] == '-') {
-            selectedString.replace(0, 1, "0");
-            selectedString.delete(1, selectedString.length());
+        if (!resetOnNextInput) {
+            if (isSingleDigitNegative(selectedString.toString())) {
+                selectedString.replace(0, 1, "0")
+                        .delete(1, selectedString.length());
+            }
+            if (isSingleDigitPositive(selectedString.toString())) {
+                selectedString.replace(0, 1, "0");
+            }
+            if (selectedString.length() > 1) {
+                selectedString.deleteCharAt(selectedString.length() - 1);
+            }
+            display.setText(tempString + selectedString.toString());
         }
-        if (selectedString.length() == 1 && !selectedString.toString().equals("0")) {
-            selectedString.replace(0, 1, "0");
-        }
-        if (selectedString.length() > 1) {
-            selectedString.deleteCharAt(selectedString.length() - 1);
-        }
-        display.setText(tempString + selectedString.toString());
+    }
+
+    public boolean isSingleDigitNegative(String string) {
+        return string.length() == 2 && string.charAt(0) == '-';
+    }
+
+    public boolean isSingleDigitPositive(String string) {
+        return string.length() == 1 && !string.toString().equals("0");
     }
 
     public void btnClickClear() {
         tempString = "";
         a = new StringBuilder();
         b = new StringBuilder();
-        selectedString = a;
-        selectedString.append("0");
+        selectedString = a.append("0");
         display.setText(selectedString.toString());
         minidisplay.setText("");
     }
 
     public String removePeriod(String string) {
         try {
-            if (string.charAt(string.length() - 1) == '.') {
-                StringBuilder tempStringB = new StringBuilder();
-                tempStringB.append(string);
+            if (endsWithPeriod(string)) {
+                StringBuilder tempStringB = new StringBuilder().append(string);
                 tempStringB.delete(tempStringB.length() - 1, tempStringB.length());
                 string = tempStringB.toString();
             }
@@ -223,20 +246,26 @@ public class CalculatorController implements Initializable {
         }
     }
 
-    public void btnClickPeriod() {
-        if (selectedString.isEmpty()) {
-            selectedString.append("0");
-            selectedString.append(".");
+    public boolean endsWithPeriod(String string) {
+        return string.charAt(string.length() - 1) == '.';
+    }
+
+    public void btnClickPeriod(String period) {
+        if (resetOnNextInput) {
+            resetStringWithInput("0" + period);
+        } else {
+            if (selectedString.isEmpty()) {
+                selectedString.append("0.");
+            }
+            if (hasPeriod(selectedString.toString())) {
+                selectedString.append(".");
+            }
+            display.setText(tempString + selectedString);
         }
-        if (hasPeriod(selectedString.toString())) {
-            selectedString.append(".");
-        }
-        display.setText(tempString + selectedString);
     }
 
     public boolean hasPeriod(String string) {
-        char[] array = string.toCharArray();
-        for (char c : array) {
+        for (char c : string.toCharArray()) {
             if (c == '.') {
                 return false;
             }
