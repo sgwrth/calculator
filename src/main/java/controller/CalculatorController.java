@@ -217,7 +217,7 @@ public class CalculatorController implements Initializable {
     }
 
     public boolean isSingleDigitPositive(String string) {
-        return string.length() == 1 && !string.toString().equals("0");
+        return string.length() == 1 && !string.equals("0");
     }
 
     public void btnClickClear() {
@@ -231,16 +231,19 @@ public class CalculatorController implements Initializable {
 
     public String removePeriod(String string) {
         try {
+            StringBuilder tempStringB = new StringBuilder();
             if (endsWithPeriod(string)) {
-                StringBuilder tempStringB = new StringBuilder().append(string);
-                tempStringB.delete(tempStringB.length() - 1, tempStringB.length());
-                string = tempStringB.toString();
+                tempStringB.append(string);
             }
-            return string;
+            return removeLastChar(tempStringB).toString();
         } catch (ArrayIndexOutOfBoundsException e) {
             e.printStackTrace();
             return "0";
         }
+    }
+
+    public StringBuilder removeLastChar(StringBuilder sb) {
+        return sb.delete(sb.length() - 1, sb.length());
     }
 
     public boolean endsWithPeriod(String string) {
@@ -254,7 +257,7 @@ public class CalculatorController implements Initializable {
             if (selectedString.isEmpty()) {
                 selectedString.append("0.");
             }
-            if (hasPeriod(selectedString.toString())) {
+            if (!hasPeriod(selectedString.toString())) {
                 selectedString.append(".");
             }
             display.setText(tempString + selectedString);
@@ -262,12 +265,7 @@ public class CalculatorController implements Initializable {
     }
 
     public boolean hasPeriod(String string) {
-        for (char c : string.toCharArray()) {
-            if (c == '.') {
-                return false;
-            }
-        }
-        return true;
+        return string.contains(".");
     }
 
 }
