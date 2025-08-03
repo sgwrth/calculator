@@ -177,10 +177,9 @@ public class CalculatorController implements Initializable {
     }
 
     public void cropPeriodZero(String string) {
-        StringBuilder cropped = new StringBuilder().append(string);
-        cropped.delete(cropped.length() - 2, cropped.length());
-        display.setText(cropped.toString());
-        a = new StringBuilder().append(cropped);
+        StringBuilder sb = popChars(new StringBuilder().append(string), 2);
+        display.setText(sb.toString());
+        a = new StringBuilder().append(sb);
     }
 
     public boolean endsWithPeriodZero(String string) {
@@ -231,18 +230,18 @@ public class CalculatorController implements Initializable {
 
     public String removePeriod(String string) {
         try {
-            StringBuilder tempStringB = new StringBuilder();
+            StringBuilder sb = new StringBuilder().append(string);
             if (endsWithPeriod(string)) {
-                tempStringB.append(string);
+                sb = popChars(sb, 1);
             }
-            return removeLastChar(tempStringB).toString();
+            return sb.toString();
         } catch (ArrayIndexOutOfBoundsException e) {
             e.printStackTrace();
             return "0";
         }
     }
 
-    public StringBuilder removeLastChar(StringBuilder sb) {
+    public StringBuilder popChars(StringBuilder sb, int number) {
         return sb.delete(sb.length() - 1, sb.length());
     }
 
