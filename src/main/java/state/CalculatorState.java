@@ -3,7 +3,7 @@ package state;
 import javafx.fxml.FXML;
 import javafx.scene.text.Text;
 import org.apache.commons.compress.utils.ChecksumCalculatingInputStream;
-import strategy.IArithmeticStrategy;
+import strategy.*;
 
 public class CalculatorState {
     public Text display;
@@ -15,17 +15,6 @@ public class CalculatorState {
     public IArithmeticStrategy arithmeticStrategy;
     public boolean resetOnNextInput;
 
-    public CalculatorState() {
-        this.display = new Text();
-        this.minidisplay = new Text();
-        this.a = new StringBuilder();
-        this.b = new StringBuilder();
-        this.selectedString = new StringBuilder();
-        this.tempString = "";
-        this.arithmeticStrategy = null;
-        this.resetOnNextInput = false;
-    }
-
     public CalculatorState(
             Text display,
             Text minidisplay,
@@ -44,55 +33,31 @@ public class CalculatorState {
         this.resetOnNextInput = resetOnNextInput;
     }
 
-    public CalculatorState(
-            Text display,
-            Text minidisplay,
-            StringBuilder a,
-            StringBuilder b,
-            StringBuilder selectedString,
-            String tempString,
-            IArithmeticStrategy arithmeticStrategy,
-            boolean resetOnNextInput
-    ) {
-        this.display = display;
-        this.minidisplay = minidisplay;
-        this.a = a;
-        this.b = b;
-        this.selectedString = this.a;
-        this.tempString = tempString;
-        this.arithmeticStrategy = null;
-        this.resetOnNextInput = resetOnNextInput;
-    }
-
+    /* Copy constructor. */
     public CalculatorState(CalculatorState state) {
-        this.display = state.display;
-        this.minidisplay = state.minidisplay;
-        this.a = state.a;
-        this.b = state.b;
-        this.selectedString = state.selectedString;
+        this.display = new Text();
+        this.display.setText(state.display.getText());
+        this.minidisplay = new Text();
+        this.minidisplay.setText(state.minidisplay.getText());
+        this.a = new StringBuilder();
+        this.a.append(state.a.toString());
+        this.b = new StringBuilder();
+        this.b.append(state.b.toString());
+        this.selectedString = (state.selectedString == state.a) ? this.a : this.b;
         this.tempString = state.tempString;
-        this.arithmeticStrategy = state.arithmeticStrategy;
+        if (state.arithmeticStrategy == null) {
+            this.arithmeticStrategy = null;
+        } else {
+            final var clazz = state.arithmeticStrategy.getClass();
+            switch (clazz.getSimpleName()) {
+                case "Addition" -> this.arithmeticStrategy = new Addition();
+                case "Subtraction" -> this.arithmeticStrategy = new Subtraction();
+                case "Multiplication" -> this.arithmeticStrategy = new Multiplication();
+                case "Division" -> this.arithmeticStrategy = new Division();
+                default -> throw new IllegalArgumentException("Unknown strat" + clazz.getName());
+            }
+        }
         this.resetOnNextInput = state.resetOnNextInput;
     }
-
-//    public CalculatorState(
-//            CalculatorState state,
-//            String string
-//        ) {
-//
-//        /* Copied from state parameter: */
-//        this.minidisplay = state.minidisplay;
-//        this.b = state.b;
-//        this.tempString = state.tempString;
-//        this.arithmeticStrategy = state.arithmeticStrategy;
-//
-//        /* New state values: */
-//        Text newDisplay = new Text();
-//        newDisplay.setText(state.selectedString.toString());
-//        this.display = newDisplay;
-//        this.a = new StringBuilder().append(string);
-//        this.selectedString = state.a;
-//        this.resetOnNextInput = false;
-//    }
 
 }

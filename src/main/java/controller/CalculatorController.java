@@ -1,6 +1,5 @@
 package controller;
 
-import javafx.scene.text.Text;
 import state.CalculatorState;
 import strategy.IArithmeticStrategy;
 
@@ -9,7 +8,7 @@ public class CalculatorController {
     private final int MAX_STRING_LENGTH = 14;
 
     public CalculatorState btnClickOneToNine(CalculatorState state, String number) {
-        CalculatorState newState = new CalculatorState(state);
+        var newState = new CalculatorState(state);
         if (newState.resetOnNextInput) {
             newState = resetStringWithInput(newState, number);
         } else {
@@ -19,70 +18,68 @@ public class CalculatorController {
                 newState.selectedString.replace(0, 1, number);
             }
         }
-        newState.display.setText(newState.selectedString.toString());
+        newState.display.setText(newState.tempString + newState.selectedString);
         return newState;
     }
 
     public CalculatorState resetStringWithInput(CalculatorState state, String string) {
-        Text newDisplay = new Text();
-        newDisplay.setText(state.selectedString.toString());
-        return new CalculatorState(
-            newDisplay,
-            state.minidisplay,
-            new StringBuilder().append(string),
-            state.b,
-            state.a,
-            state.tempString,
-            state.arithmeticStrategy,
-            false
-        );
+        var newState = new CalculatorState(state);
+        newState.display.setText(state.selectedString.toString());
+        newState.a = new StringBuilder().append(string);
+        return newState;
     }
 
-    public void btnClickZero(CalculatorState state, String zero) {
-        if (state.resetOnNextInput) {
-            resetStringWithInput(state, zero);
+    public CalculatorState btnClickZero(CalculatorState state, String zero) {
+        var newState = new CalculatorState(state);
+        if (newState.resetOnNextInput) {
+            newState = resetStringWithInput(state, zero);
         } else {
-            if (!state.selectedString.toString().equals("0")) {
-                state.selectedString.append("0");
+            if (!newState.selectedString.toString().equals("0")) {
+                newState.selectedString.append("0");
             }
-            state.display.setText(state.tempString + state.selectedString);
+            newState.display.setText(newState.tempString + newState.selectedString);
         }
+        return newState;
     }
 
-    public void btnClickStrategy(
+    public CalculatorState btnClickStrategy(
             CalculatorState state,
             IArithmeticStrategy strat,
             String operator
     ) {
-        if (state.selectedString == state.a) {
-            state.arithmeticStrategy = strat;
-            state.tempString = operator;
-            state.display.setText(state.tempString);
-            state.minidisplay.setText(removePeriod(state.a.toString()));
-            state.selectedString = state.b;
-            state.resetOnNextInput = false;
+        var newState = new CalculatorState(state);
+        if (newState.selectedString == newState.a) {
+            newState.arithmeticStrategy = strat;
+            newState.tempString = operator;
+            newState.display.setText(newState.tempString);
+            newState.minidisplay.setText(removePeriod(newState.a.toString()));
+            newState.selectedString = newState.b;
+            newState.resetOnNextInput = false;
         }
+        return newState;
     }
 
-    public void btnClickEquals(CalculatorState state) {
-        if (state.selectedString == state.b) {
-            String resultString = String.valueOf(doCalculation(state));
+    public CalculatorState btnClickEquals(CalculatorState state) {
+        var newState = new CalculatorState(state);
+        if (newState.selectedString == newState.b) {
+            final var resultString = String.valueOf(doCalculation(newState));
             if (endsWithPeriodZero(resultString)) {
-                cropPeriodZero(state, resultString);
+                newState = cropPeriodZero(newState, resultString);
             } else {
                 if (isOverlong(resultString)) {
-                    state.display.setText(cropOverlong(resultString));
+                    newState.display.setText(cropOverlong(resultString));
                 } else {
-                    state.display.setText(resultString);
+                    newState.display.setText(resultString);
                 }
-                state.a = new StringBuilder().append(resultString);
+                newState.a = new StringBuilder().append(resultString);
             }
-            state.selectedString = state.a;
-            state.b = new StringBuilder();
-            state.tempString = "";
-            state.minidisplay.setText("");
-            state.resetOnNextInput = true;
+            newState.selectedString = state.a;
+            newState.b = new StringBuilder();
+            newState.tempString = "";
+            newState.minidisplay.setText("");
+            newState.resetOnNextInput = true;
         }
+        return newState;
     }
 
     public double doCalculation(CalculatorState state) {
@@ -91,10 +88,12 @@ public class CalculatorController {
                 Double.parseDouble(state.b.toString()));
     }
 
-    public void cropPeriodZero(CalculatorState state, String string) {
+    public CalculatorState cropPeriodZero(CalculatorState state, String string) {
+        var newState = new CalculatorState(state);
         StringBuilder sb = popChars(new StringBuilder().append(string), 2);
-        state.display.setText(sb.toString());
-        state.a = new StringBuilder().append(sb);
+        newState.display.setText(sb.toString());
+        newState.a = new StringBuilder().append(sb);
+        return newState;
     }
 
     public boolean endsWithPeriodZero(String string) {
@@ -110,20 +109,23 @@ public class CalculatorController {
         return string.substring(0, MAX_STRING_LENGTH - 3) + "...";
     }
 
-    public void btnClickDelete(CalculatorState state) {
-        if (!state.resetOnNextInput) {
-            if (isSingleDigitNegative(state.selectedString.toString())) {
-                state.selectedString.replace(0, 1, "0")
-                        .delete(1, state.selectedString.length());
+    public CalculatorState btnClickDelete(CalculatorState state) {
+        final var newState = new CalculatorState(state);
+        if (!newState.resetOnNextInput) {
+            if (isSingleDigitNegative(newState.selectedString.toString())) {
+                newState.selectedString
+                        .replace(0, 1, "0")
+                        .delete(1, newState.selectedString.length());
             }
-            if (isSingleDigitPositive(state.selectedString.toString())) {
-                state.selectedString.replace(0, 1, "0");
+            if (isSingleDigitPositive(newState.selectedString.toString())) {
+                newState.selectedString.replace(0, 1, "0");
             }
-            if (state.selectedString.length() > 1) {
-                state.selectedString.deleteCharAt(state.selectedString.length() - 1);
+            if (newState.selectedString.length() > 1) {
+                newState.selectedString.deleteCharAt(newState.selectedString.length() - 1);
             }
-            state.display.setText(state.tempString + state.selectedString);
+            newState.display.setText(newState.tempString + newState.selectedString);
         }
+        return newState;
     }
 
     public boolean isSingleDigitNegative(String string) {
@@ -134,18 +136,20 @@ public class CalculatorController {
         return string.length() == 1 && !string.equals("0");
     }
 
-    public void btnClickClear(CalculatorState state) {
-        state.tempString = "";
-        state.a = new StringBuilder();
-        state.b = new StringBuilder();
-        state.selectedString = state.a.append("0");
-        state.display.setText(state.selectedString.toString());
-        state.minidisplay.setText("");
+    public CalculatorState btnClickClear(CalculatorState state) {
+        final var newState = new CalculatorState(state);
+        newState.tempString = "";
+        newState.a = new StringBuilder();
+        newState.b = new StringBuilder();
+        newState.selectedString = newState.a.append("0");
+        newState.display.setText(newState.selectedString.toString());
+        newState.minidisplay.setText("");
+        return newState;
     }
 
     public String removePeriod(String string) {
         try {
-            StringBuilder sb = new StringBuilder().append(string);
+            var sb = new StringBuilder().append(string);
             if (endsWithPeriod(string)) {
                 sb = popChars(sb, 1);
             }
@@ -164,18 +168,20 @@ public class CalculatorController {
         return string.charAt(string.length() - 1) == '.';
     }
 
-    public void btnClickPeriod(CalculatorState state, String period) {
+    public CalculatorState btnClickPeriod(CalculatorState state, String period) {
+        var newState = new CalculatorState(state);
         if (state.resetOnNextInput) {
-            resetStringWithInput(state, "0" + period);
+            newState = resetStringWithInput(state, "0" + period);
         } else {
-            if (state.selectedString.isEmpty()) {
-                state.selectedString.append("0.");
+            if (newState.selectedString.isEmpty()) {
+                newState.selectedString.append("0.");
             }
-            if (!hasPeriod(state.selectedString.toString())) {
-                state.selectedString.append(".");
+            if (!hasPeriod(newState.selectedString.toString())) {
+                newState.selectedString.append(".");
             }
-            state.display.setText(state.tempString + state.selectedString);
+            newState.display.setText(newState.tempString + newState.selectedString);
         }
+        return newState;
     }
 
     public boolean hasPeriod(String string) {

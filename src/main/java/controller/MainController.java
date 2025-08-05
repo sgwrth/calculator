@@ -35,7 +35,7 @@ public class MainController implements Initializable {
     }
 
     public void enter0() {
-         controller.btnClickZero(state, "0");
+         controller.updateState(state, controller.btnClickZero(state, "0"));
     }
 
     public void enter1() {
@@ -75,35 +75,35 @@ public class MainController implements Initializable {
     }
 
     public void enterPeriod() {
-        controller.btnClickPeriod(state, ".");
+        controller.updateState(state, controller.btnClickPeriod(state, "."));
     }
 
     public void selectAddition() {
-        controller.btnClickStrategy(state, new Addition(), "+ ");
+        controller.updateState(state, controller.btnClickStrategy(state, new Addition(), "+ "));
     }
 
     public void selectSubtraction() {
-        controller.btnClickStrategy(state, new Subtraction(), "- ");
+        controller.updateState(state, controller.btnClickStrategy(state, new Subtraction(), "- "));
     }
 
     public void selectMultiplication() {
-        controller.btnClickStrategy(state, new Multiplication(), "* ");
+        controller.updateState(state, controller.btnClickStrategy(state, new Multiplication(), "* "));
     }
 
     public void selectDivision() {
-        controller.btnClickStrategy(state, new Division(), "/ ");
+        controller.updateState(state, controller.btnClickStrategy(state, new Division(), "/ "));
     }
 
     public void equals() {
-        controller.btnClickEquals(state);
+        controller.updateState(state, controller.btnClickEquals(state));
     }
 
     public void delete() {
-        controller.btnClickDelete(state);
+        controller.updateState(state, controller.btnClickDelete(state));
     }
 
     public void clear() {
-        controller.btnClickClear(state);
+        controller.updateState(state, controller.btnClickClear(state));
     }
 
 }
