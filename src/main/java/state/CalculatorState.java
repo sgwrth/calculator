@@ -15,6 +15,17 @@ public class CalculatorState {
     public IArithmeticStrategy arithmeticStrategy;
     public boolean resetOnNextInput;
 
+    public CalculatorState() {
+        this.display = new Text();
+        this.minidisplay = new Text();
+        this.a = new StringBuilder();
+        this.b = new StringBuilder();
+        this.selectedString = this.a;
+        this.tempString = "";
+        this.arithmeticStrategy = null;
+        this.resetOnNextInput = false;
+    }
+
     public CalculatorState(
             Text display,
             Text minidisplay,
